@@ -32,10 +32,10 @@ var firebaseConfig = {
    database.ref().push(newTrain);
 
     // Logs everything to console
-  // console.log(newTrain.trainName);
-  // console.log(newTrain.destination);
-  // console.log(newTrain.firstTime);
-  // console.log(newTrain.frequency);
+  console.log(newTrain.trainName);
+  console.log(newTrain.destination);
+  console.log(newTrain.firstTime);
+  console.log(newTrain.frequency);
 
   // alert("New Train Added");
 
@@ -66,9 +66,49 @@ database.ref().on("child_added", function(childSnapshot) {
     // var nextArrival = moment.unix(empStart).format("HH:mm");
 
     // // Calculate the next Arrival
-    var nextArrival = moment().diff(moment(empStart, "X"), "months");
-    console.log(empMonths);
-  
+    // var nextArrival = moment().diff(moment(empStart, "X"), "months");
+    // console.log(empMonths);
+
+    // TEST AREA
+
+   
+
+    // Time is 3:30 AM
+
+
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % frequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+
+
+
+
+
+
+
+    // TEST AREA
+
     // Calculate minutes Away
     // var minutesAway = empMonths * empRate;
     // console.log(empBilled);
@@ -78,8 +118,9 @@ database.ref().on("child_added", function(childSnapshot) {
       $("<td>").text(trainName),
       $("<td>").text(destination),
       $("<td>").text(frequency),
-      // $("<td>").text(nextArrival),
-      // $("<td>").text(minutesAway),
+      $("<td>").text(moment(nextTrain).format("hh:mm a")) ,
+      $("<td>").text(tMinutesTillTrain),
+      
     );
 
       // Append the new row to the table
